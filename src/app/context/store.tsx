@@ -50,7 +50,7 @@ const reducer = (state: CtxStateType, action: ActionType) => {
       return { ...state, expenses: [...state.expenses, ...action.expenses] };
 
     case ActionTypeEnum.SET_INITIAL_STATE_FROM_LOCAL_STORAGE:
-      return { ...state, ...action.expenses, recovered: true };
+      return { ...state, expenses: action.expenses, recovered: true };
 
     default:
       return state;

@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import Dropzone from "../components/dndarea";
 import { ActionTypeEnum, Expense, ExpensesContext } from "../context/store";
 import { csvStrToArray } from "../utils/csv";
+import ExpensesPieChart from "../components/expensespiechart";
 
 export default function Dashboard() {
   const { state, dispatch } = useContext(ExpensesContext);
@@ -26,6 +27,10 @@ export default function Dashboard() {
             const cols = ["category", "date", "title", "amount"];
             for (let i = 0; i < cols.length; i++) {
               if (!(cols[i] in r)) return false;
+            }
+
+            if (!r["category"] || r["amount"] === null || r["amount"] < 0) {
+              return false;
             }
 
             return true;
@@ -55,8 +60,6 @@ export default function Dashboard() {
     }
   }, [files, dispatch]);
 
-  const handleFiles = (files: File[]) => {};
-
   return (
     <div>
       {!state.expenses.length && (
@@ -67,6 +70,9 @@ export default function Dashboard() {
             setFiles(files);
           }}
         />
+      )}
+      {Boolean(state.expenses.length) && (
+        <ExpensesPieChart expenses={state.expenses} />
       )}
       {Boolean(state.expenses.length) && (
         <table>
