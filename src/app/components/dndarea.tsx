@@ -15,11 +15,6 @@ const Dropzone = ({ activeText, inactiveText, onUpload }: Props) => {
     if (onUpload) {
       return onUpload(files);
     }
-
-    console.log("files uploaded");
-    files.forEach((f) => {
-      console.log(f);
-    });
   };
 
   const handleDragEnter = () => {
