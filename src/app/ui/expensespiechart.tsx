@@ -1,17 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Expense } from "../context/store";
+import { useContext, useEffect, useState } from "react";
+import { ActionTypeEnum, ExpensesContext } from "../context/store";
 import { PieChart } from "@mui/x-charts/PieChart";
-import {
-  blueberryTwilightPalette,
-  mangoFusionPalette,
-  cheerfulFiestaPalette,
-} from "@mui/x-charts/colorPalettes";
-
-type Props = {
-  expenses: Expense[];
-};
+import { mangoFusionPalette } from "@mui/x-charts/colorPalettes";
 
 type Data = {
   id: number;
@@ -19,13 +11,14 @@ type Data = {
   label: string;
 };
 
-export default function ExpensesPieChart({ expenses }: Props) {
+export default function ExpensesPieChart() {
   const [data, setData] = useState<Data[]>([]);
+  const { state, dispatch } = useContext(ExpensesContext);
 
   useEffect(() => {
     const totalByCategory: { [cat: string]: number } = {};
 
-    expenses.forEach((exp) => {
+    state.expenses.forEach((exp) => {
       const prev = totalByCategory[exp.category] ?? 0;
       totalByCategory[exp.category] = prev + exp.amount;
     });
@@ -39,7 +32,7 @@ export default function ExpensesPieChart({ expenses }: Props) {
         };
       })
     );
-  }, [expenses]);
+  }, [state.expenses]);
 
   return (
     <PieChart
@@ -48,6 +41,12 @@ export default function ExpensesPieChart({ expenses }: Props) {
       series={[{ data }]}
       width={500}
       height={400}
+      onItemClick={(evt, d) => {
+        dispatch({
+          type: ActionTypeEnum.SET_CURRENT_CATEGORY,
+          currentCategory: data[d.dataIndex].label,
+        });
+      }}
     />
   );
 }

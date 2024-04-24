@@ -21,23 +21,27 @@ export type Expense = {
 type CtxStateType = {
   expenses: Expense[];
   recovered: boolean;
+  currentCategory: string;
 };
 
 export enum ActionTypeEnum {
   ADD,
   SET_INITIAL_STATE_FROM_LOCAL_STORAGE,
   RESET,
+  SET_CURRENT_CATEGORY,
 }
 
 type ActionType = {
   type: ActionTypeEnum;
   files?: File[];
   expenses?: Expense[];
+  currentCategory?: string;
 };
 
 const initialState: CtxStateType = {
   expenses: [],
   recovered: false,
+  currentCategory: "todos",
 };
 
 const reducer = (state: CtxStateType, action: ActionType) => {
@@ -51,6 +55,11 @@ const reducer = (state: CtxStateType, action: ActionType) => {
 
     case ActionTypeEnum.SET_INITIAL_STATE_FROM_LOCAL_STORAGE:
       return { ...state, expenses: action.expenses, recovered: true };
+
+    case ActionTypeEnum.SET_CURRENT_CATEGORY:
+      return action.currentCategory
+        ? { ...state, currentCategory: action.currentCategory }
+        : state;
 
     default:
       return state;

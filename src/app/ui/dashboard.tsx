@@ -5,7 +5,9 @@ import { useContext, useEffect, useState } from "react";
 import Dropzone from "../components/dndarea";
 import { ActionTypeEnum, Expense, ExpensesContext } from "../context/store";
 import { csvStrToArray } from "../utils/csv";
-import ExpensesPieChart from "../components/expensespiechart";
+import ExpensesPieChart from "../ui/expensespiechart";
+import ExpensesDataGrid from "./datagrid";
+import DataViz from "./dataviz";
 
 export default function Dashboard() {
   const { state, dispatch } = useContext(ExpensesContext);
@@ -71,29 +73,7 @@ export default function Dashboard() {
           }}
         />
       )}
-      {Boolean(state.expenses.length) && (
-        <ExpensesPieChart expenses={state.expenses} />
-      )}
-      {Boolean(state.expenses.length) && (
-        <table>
-          <thead>
-            <tr>
-              <td>Category</td>
-              <td>Title</td>
-              <td>Amount</td>
-            </tr>
-          </thead>
-          <tbody>
-            {state.expenses.map((exp: Expense) => (
-              <tr key={exp.id}>
-                <td>{exp.category}</td>
-                <td>{exp.title}</td>
-                <td>{exp.amount}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {Boolean(state.expenses.length) && <DataViz />}
     </div>
   );
 }
