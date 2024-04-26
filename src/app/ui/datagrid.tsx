@@ -6,26 +6,27 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Expense, ExpensesContext } from "../context/store";
 
 import moment from "moment";
+import { useMediaQuery } from "../../../node_modules/@mui/material/index";
 
 const columns: GridColDef[] = [
   {
     field: "date",
     headerName: "Data",
-    width: 200,
+    width: 120,
     editable: false,
     valueGetter: (value, row) => moment(value).format("YYYY-MM-DD"),
   },
   {
     field: "category",
     headerName: "Categoria",
-    width: 150,
+    width: 100,
     editable: false,
   },
   {
     field: "title",
     headerName: "Titulo",
     type: "string",
-    width: 250,
+    width: 150,
     editable: false,
   },
   {
@@ -40,6 +41,7 @@ const columns: GridColDef[] = [
 export default function ExpensesDataGrid() {
   const { state, dispatch } = useContext(ExpensesContext);
   const [rows, setRows] = useState<Expense[]>([]);
+  const smScreen = useMediaQuery("(min-width:400px)");
 
   useEffect(() => {
     console.log(state.currentCategory);
@@ -53,7 +55,7 @@ export default function ExpensesDataGrid() {
   }, [state.expenses, state.currentCategory]);
 
   return (
-    <Box sx={{ height: 375, width: 700 }}>
+    <Box sx={{ height: 375, width: smScreen ? 400 : 600 }}>
       <DataGrid
         rows={rows}
         columns={columns}

@@ -5,8 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import Dropzone from "../components/dndarea";
 import { ActionTypeEnum, Expense, ExpensesContext } from "../context/store";
 import { csvStrToArray } from "../utils/csv";
-import ExpensesPieChart from "../ui/expensespiechart";
-import ExpensesDataGrid from "./datagrid";
 import DataViz from "./dataviz";
 
 export default function Dashboard() {
@@ -18,7 +16,6 @@ export default function Dashboard() {
       const fr = new FileReader();
 
       fr.onload = function () {
-        console.log("read");
         const text = fr.result;
         const arr = csvStrToArray(text as string);
 
@@ -65,13 +62,22 @@ export default function Dashboard() {
   return (
     <div>
       {!state.expenses.length && (
-        <Dropzone
-          activeText="Pode soltar"
-          inactiveText="Joge seus CSV do Nubank aqui"
-          onUpload={(files) => {
-            setFiles(files);
-          }}
-        />
+        <div className="flex flex-col gap-2 p-10 w-full">
+          <Dropzone
+            activeText="Pode soltar"
+            inactiveText="Joge seus CSV do Nubank aqui"
+            onUpload={(files) => {
+              setFiles(files);
+            }}
+          />
+          <a
+            className="font-semibold text-sm underline ml-auto"
+            href="https://app.nubank.com.br/beta/login/"
+          >
+            Obtenha o export CSV do extrato da sua fatura no seu perfil do
+            Nubank
+          </a>
+        </div>
       )}
       {Boolean(state.expenses.length) && <DataViz />}
     </div>

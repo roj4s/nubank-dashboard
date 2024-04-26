@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { ActionTypeEnum, ExpensesContext } from "../context/store";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { mangoFusionPalette } from "@mui/x-charts/colorPalettes";
+import { useMediaQuery } from "../../../node_modules/@mui/material/index";
 
 type Data = {
   id: number;
@@ -14,6 +15,7 @@ type Data = {
 export default function ExpensesPieChart() {
   const [data, setData] = useState<Data[]>([]);
   const { state, dispatch } = useContext(ExpensesContext);
+  const smScreen = useMediaQuery("(min-width:400px)");
 
   useEffect(() => {
     const totalByCategory: { [cat: string]: number } = {};
@@ -35,18 +37,34 @@ export default function ExpensesPieChart() {
   }, [state.expenses]);
 
   return (
-    <PieChart
-      colors={mangoFusionPalette}
-      margin={{ right: 200 }}
-      series={[{ data }]}
-      width={500}
-      height={400}
-      onItemClick={(evt, d) => {
-        dispatch({
-          type: ActionTypeEnum.SET_CURRENT_CATEGORY,
-          currentCategory: data[d.dataIndex].label,
-        });
-      }}
-    />
+    <div>
+      <PieChart
+        colors={mangoFusionPalette}
+        margin={{ right: 200 }}
+        series={[{ data }]}
+        /*legend={
+          smScreen
+            ? {
+                direction: "row",
+                position: { vertical: "bottom", horizontal: "middle" },
+              }
+            : {
+                direction: "col",
+                position: { vertical: "middle", horizontal: "right" },
+              }
+         }*/
+        width={smScreen ? 400 : 500}
+        height={400}
+        onItemClick={(evt, d) => {
+          dispatch({
+            type: ActionTypeEnum.SET_CURRENT_CATEGORY,
+            currentCategory: data[d.dataIndex].label,
+          });
+        }}
+      />
+      <p className="text-sm font-light" style={{ marginTop: -20 }}>
+        * Click na categoria para filtrar a tabela
+      </p>
+    </div>
   );
 }
