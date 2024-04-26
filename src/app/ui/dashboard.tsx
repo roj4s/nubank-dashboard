@@ -28,7 +28,9 @@ export default function Dashboard() {
               if (!(cols[i] in r)) return false;
             }
 
-            if (!r["category"] || r["amount"] === null || r["amount"] < 0) {
+            const w = r as Expense;
+
+            if (!w["category"] || w["amount"] === null || w["amount"] < 0) {
               return false;
             }
 
@@ -61,7 +63,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      {!state.expenses.length && (
+      {!state.expenses?.length && (
         <div className="flex flex-col gap-2 p-10 w-full">
           <Dropzone
             activeText="Pode soltar"
@@ -79,7 +81,7 @@ export default function Dashboard() {
           </a>
         </div>
       )}
-      {Boolean(state.expenses.length) && <DataViz />}
+      {Boolean(state.expenses?.length) && <DataViz />}
     </div>
   );
 }

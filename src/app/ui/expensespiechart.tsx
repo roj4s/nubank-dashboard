@@ -18,22 +18,24 @@ export default function ExpensesPieChart() {
   const smScreen = useMediaQuery("(min-width:400px)");
 
   useEffect(() => {
-    const totalByCategory: { [cat: string]: number } = {};
+    if (state.expenses) {
+      const totalByCategory: { [cat: string]: number } = {};
 
-    state.expenses.forEach((exp) => {
-      const prev = totalByCategory[exp.category] ?? 0;
-      totalByCategory[exp.category] = prev + exp.amount;
-    });
+      state.expenses.forEach((exp) => {
+        const prev = totalByCategory[exp.category] ?? 0;
+        totalByCategory[exp.category] = prev + exp.amount;
+      });
 
-    setData(
-      Object.keys(totalByCategory).map((k, i) => {
-        return {
-          id: i,
-          value: totalByCategory[k],
-          label: k,
-        };
-      })
-    );
+      setData(
+        Object.keys(totalByCategory).map((k, i) => {
+          return {
+            id: i,
+            value: totalByCategory[k],
+            label: k,
+          };
+        })
+      );
+    }
   }, [state.expenses]);
 
   return (

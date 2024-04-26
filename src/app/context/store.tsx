@@ -6,6 +6,7 @@ import {
   ReactNode,
   useEffect,
   useReducer,
+  Reducer,
 } from "react";
 
 const LS_KEY = "nubank-reports";
@@ -19,7 +20,7 @@ export type Expense = {
 };
 
 type CtxStateType = {
-  expenses: Expense[];
+  expenses?: Expense[];
   recovered: boolean;
   currentCategory: string;
 };
@@ -44,14 +45,20 @@ const initialState: CtxStateType = {
   currentCategory: "todos",
 };
 
-const reducer = (state: CtxStateType, action: ActionType) => {
+const reducer: Reducer<CtxStateType, ActionType> = (
+  state: CtxStateType,
+  action: ActionType
+) => {
   switch (action.type) {
     case ActionTypeEnum.RESET:
       return { ...state, expenses: [] };
 
     case ActionTypeEnum.ADD:
       if (!action.expenses?.length) return state;
-      return { ...state, expenses: [...state.expenses, ...action.expenses] };
+      return {
+        ...state,
+        expenses: [...(state.expenses ?? []), ...action.expenses],
+      };
 
     case ActionTypeEnum.SET_INITIAL_STATE_FROM_LOCAL_STORAGE:
       return { ...state, expenses: action.expenses, recovered: true };

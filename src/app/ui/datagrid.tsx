@@ -46,11 +46,12 @@ export default function ExpensesDataGrid() {
   useEffect(() => {
     console.log(state.currentCategory);
     if (state.currentCategory === "todos") {
-      setRows(state.expenses);
+      setRows(state.expenses ?? []);
     } else {
-      setRows(
-        state.expenses.filter((e) => e.category === state.currentCategory)
-      );
+      if (state.expenses)
+        setRows(
+          state.expenses.filter((e) => e.category === state.currentCategory)
+        );
     }
   }, [state.expenses, state.currentCategory]);
 

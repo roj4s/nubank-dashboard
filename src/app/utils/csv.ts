@@ -4,10 +4,13 @@ export const csvStrToArray = (str: string) => {
 
   const array = csvRows.map((i) => {
     const values = i.split(",");
-    const obj = csvHeader.reduce((object, header, index) => {
-      object[header] = values[index];
-      return object;
-    }, {});
+    const obj = csvHeader.reduce(
+      (object: { [k: string]: any }, header, index) => {
+        object[header] = values[index];
+        return object;
+      },
+      {}
+    );
     return obj;
   });
 

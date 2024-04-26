@@ -46,7 +46,7 @@ export default function InputFileUpload({ onUpload }: Props) {
 
       <VisuallyHiddenInput
         type="file"
-        onChange={(e: InputEvent) => {
+        onChange={(e: React.FormEvent<HTMLInputElement>) => {
           const input = e.target as HTMLInputElement;
 
           if (!input.files?.length) {
